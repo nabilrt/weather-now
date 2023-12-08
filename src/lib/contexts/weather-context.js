@@ -76,30 +76,13 @@ export const WeatherContextProvider = ({ children }) => {
       try {
         const response = await fetch(url, options);
         const result = await response.json();
-        console.log(result);
-
-        toast.success("Weather Fetching Successful", {
-          duration: 2000,
-          style: {
-            borderRadius: "10px",
-            background: "#333",
-            color: "#fff",
-          },
-        });
         setTimeout(() => {
           dispatch({ type: "SET_WEATHER_CONDITIONS", payload: result.current });
           dispatch({ type: "SET_WEATHER_LOCATION", payload: result.location });
           dispatch({ type: "SET_LOADING" });
         }, 2000);
       } catch (error) {
-        toast.error("Unable to Fetch Data", {
-          duration: 2000,
-          style: {
-            borderRadius: "10px",
-            background: "#333",
-            color: "#fff",
-          },
-        });
+        console.error(error);
       }
     } else {
       const url = `https://weatherapi-com.p.rapidapi.com/current.json?q=${country.lattitude}%$2C${country.longitude}`;
@@ -143,7 +126,7 @@ export const WeatherContextProvider = ({ children }) => {
 export const useWeather = () => {
   const context = useContext(WeatherProvider);
   if (context === undefined) {
-    throw new Error("useWeather must be used within WeatherProvider");
+    throw new Error("useWeather must be used within WeatherContextProvider");
   }
   return context;
 };
